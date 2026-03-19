@@ -1,8 +1,23 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend } from 'recharts'
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts'
 
 const COLORS = ['#fb7185', '#ec4899', '#8b5cf6', '#22c55e', '#f59e0b', '#3b82f6']
+
+// Defined outside component to avoid "component created during render" error
+function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: { name: string; value: number; color: string }[]; label?: string }) {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="bg-white border border-rose-100 rounded-2xl p-3 shadow-lg text-xs">
+      <p className="font-bold text-[#3d1520] mb-1">{label}</p>
+      {payload.map((p) => (
+        <p key={p.name} style={{ color: p.color }} className="font-medium">
+          {p.name}: {p.name.includes('Revenue') || p.name.includes('₨') ? '₨' : ''}{Number(p.value).toLocaleString()}
+        </p>
+      ))}
+    </div>
+  )
+}
 
 export default function AdminAnalytics() {
   const [data, setData] = useState<any>(null)
@@ -27,42 +42,25 @@ export default function AdminAnalytics() {
   const { stats, chartData, recentOrders } = data
   const displayData = chartData.slice(-period)
 
-  // Revenue by period
-  const totalRevPeriod = displayData.reduce((s: number, d: any) => s + d.revenue, 0)
-  const totalOrdPeriod = displayData.reduce((s: number, d: any) => s + d.orders, 0)
+  const totalRevPeriod = displayData.reduce((s: number, d: { revenue: number }) => s + d.revenue, 0)
+  const totalOrdPeriod = displayData.reduce((s: number, d: { orders: number }) => s + d.orders, 0)
   const avgRevPerDay = period > 0 ? totalRevPeriod / period : 0
 
-  // Order status breakdown
   const statusBreakdown = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'].map(s => ({
     name: s.charAt(0).toUpperCase() + s.slice(1),
-    value: recentOrders.filter((o: any) => o.status === s).length,
+    value: (recentOrders as { status: string }[]).filter(o => o.status === s).length,
   })).filter(d => d.value > 0)
 
-  // Weekly comparison (last 4 weeks)
   const weeklyData = []
   for (let w = 3; w >= 0; w--) {
     const start = period === 30 ? w * 7 : w * 22
     const end = start + (period === 30 ? 7 : 22)
-    const slice = chartData.slice(-90).slice(-(end + 1)).slice(0, end - start + 1)
+    const slice = (chartData as { revenue: number; orders: number }[]).slice(-90).slice(-(end + 1)).slice(0, end - start + 1)
     weeklyData.push({
       week: `W${4 - w}`,
-      revenue: slice.reduce((s: number, d: any) => s + d.revenue, 0),
-      orders: slice.reduce((s: number, d: any) => s + d.orders, 0),
+      revenue: slice.reduce((s, d) => s + d.revenue, 0),
+      orders: slice.reduce((s, d) => s + d.orders, 0),
     })
-  }
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload?.length) return null
-    return (
-      <div className="bg-white border border-rose-100 rounded-2xl p-3 shadow-lg text-xs">
-        <p className="font-bold text-[#3d1520] mb-1">{label}</p>
-        {payload.map((p: any) => (
-          <p key={p.name} style={{ color: p.color }} className="font-medium">
-            {p.name}: {p.name.includes('Revenue') || p.name.includes('₨') ? '₨' : ''}{Number(p.value).toLocaleString()}
-          </p>
-        ))}
-      </div>
-    )
   }
 
   return (

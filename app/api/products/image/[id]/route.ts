@@ -20,7 +20,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
       ? data.image_data
       : Buffer.from(data.image_data as string, 'base64')
 
-    return new NextResponse(buffer, {
+    return new NextResponse(new Uint8Array(buffer), {
       headers: {
         'Content-Type': data.image_mime || 'image/jpeg',
         'Cache-Control': 'public, max-age=31536000, immutable',

@@ -20,15 +20,17 @@ export function WishlistPanel({ open, onClose, onCountChange }: WishlistPanelPro
 
   useEffect(() => {
     if (!open || !user) return
-    setLoading(true)
-    fetch('/api/wishlist')
-      .then(r => r.json())
-      .then(d => {
+    const loadWishlist = async () => {
+      setLoading(true)
+      try {
+        const r = await fetch('/api/wishlist')
+        const d = await r.json()
         setItems(d.items || [])
         onCountChange?.(d.items?.length || 0)
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+      } catch {}
+      finally { setLoading(false) }
+    }
+    loadWishlist()
   }, [open, user])
 
   const removeItem = async (id: string) => {

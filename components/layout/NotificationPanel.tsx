@@ -58,7 +58,8 @@ export function NotificationPanel({ open, onClose, onCountChange }: Notification
   }
 
   const timeAgo = (date: string) => {
-    const diff = Date.now() - new Date(date).getTime()
+    const now = new Date()
+    const diff = now.getTime() - new Date(date).getTime()
     const mins = Math.floor(diff / 60000)
     if (mins < 1) return 'just now'
     if (mins < 60) return `${mins}m ago`

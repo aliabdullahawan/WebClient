@@ -8,7 +8,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
     const { data } = await supabase.from('avatars').select('image_data, image_mime').eq('id', id).single()
     if (!data?.image_data) return new NextResponse(null, { status: 404 })
     const buffer = Buffer.isBuffer(data.image_data) ? data.image_data : Buffer.from(data.image_data as string, 'base64')
-    return new NextResponse(buffer, {
+    return new NextResponse(new Uint8Array(buffer), {
       headers: { 'Content-Type': data.image_mime || 'image/png', 'Cache-Control': 'public, max-age=86400' },
     })
   } catch { return new NextResponse(null, { status: 500 }) }

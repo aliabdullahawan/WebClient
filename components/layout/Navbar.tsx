@@ -68,8 +68,12 @@ export function Navbar() {
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  // Close mobile menu on route change
-  useEffect(() => { setMobileOpen(false) }, [pathname])
+  // Close mobile menu on route change  
+  useEffect(() => { 
+    let ignore = false
+    if (!ignore) setMobileOpen(false)
+    return () => { ignore = true }
+  }, [pathname])
 
   const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href)
 

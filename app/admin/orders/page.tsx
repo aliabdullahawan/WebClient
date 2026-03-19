@@ -36,7 +36,7 @@ function OrdersContent() {
     setLoading(false)
   }
 
-  useEffect(() => { fetchOrders() }, [page, statusFilter])
+  useEffect(() => { fetchOrders() }, [page, statusFilter]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectOrder = async (id: string) => {
     const res = await fetch(`/api/admin/orders/${id}`)

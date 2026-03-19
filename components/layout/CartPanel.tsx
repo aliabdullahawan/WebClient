@@ -21,15 +21,17 @@ export function CartPanel({ open, onClose, onCountChange }: CartPanelProps) {
 
   useEffect(() => {
     if (!open) return
-    setLoading(true)
-    fetch('/api/cart')
-      .then(r => r.json())
-      .then(d => {
+    const loadCart = async () => {
+      setLoading(true)
+      try {
+        const r = await fetch('/api/cart')
+        const d = await r.json()
         setItems(d.items || [])
         onCountChange?.(d.items?.length || 0)
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+      } catch {}
+      finally { setLoading(false) }
+    }
+    loadCart()
   }, [open])
 
   const updateQty = async (id: string, qty: number) => {

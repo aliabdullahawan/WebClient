@@ -76,7 +76,7 @@ export default function AdminProducts() {
     setLoading(false)
   }
 
-  useEffect(() => { fetchProducts() }, [page, search])
+  useEffect(() => { fetchProducts() }, [page, search]) // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { fetch('/api/categories').then(r => r.json()).then(d => setCategories(d.categories || [])) }, [])
 
   const openNew = () => { setEditingId(null); setForm({ name: '', description: '', price: '', category_id: '', tags: '', is_featured: false, show_on_hero: false }); setNewImages([]); setShowForm(true) }

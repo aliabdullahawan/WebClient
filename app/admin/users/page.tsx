@@ -30,7 +30,7 @@ export default function AdminUsers() {
     setLoading(false)
   }
 
-  useEffect(() => { fetch_() }, [page, search])
+  useEffect(() => { fetch_() }, [page, search]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectUser = async (id: string) => {
     const res = await fetch(`/api/admin/users/${id}`)

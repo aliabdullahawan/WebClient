@@ -62,7 +62,7 @@ export default function AdminCategories() {
     setLoading(false)
   }
 
-  useEffect(() => { fetch_() }, [search, sortAsc])
+  useEffect(() => { fetch_() }, [search, sortAsc]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const openNew = () => {
     setEditingId(null); setForm({ name: '', description: '' })

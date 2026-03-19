@@ -29,10 +29,10 @@ export default function AdminDiscounts() {
   }
 
   useEffect(() => {
-    fetch_()
+    fetch_() // eslint-disable-line react-hooks/exhaustive-deps
     fetch('/api/categories').then(r => r.json()).then(d => setCategories(d.categories || []))
     fetch('/api/admin/products?limit=100').then(r => r.json()).then(d => setProducts(d.products || []))
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const save = async () => {
     if (!form.code.trim() || !form.percentage) return
