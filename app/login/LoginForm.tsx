@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { Mail, Lock, Sparkles } from 'lucide-react'
+import { Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react'
 import { AuthCard } from '@/components/auth/AuthCard'
 import { FloatingInput } from '@/components/ui/FloatingInput'
 import { BubbleButton } from '@/components/ui/BubbleButton'
@@ -22,9 +22,8 @@ export default function LoginForm() {
   const validate = () => {
     const e: typeof errors = {}
     if (!email.trim()) e.email = 'Email is required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = 'Invalid email'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = 'Invalid email address'
     if (!password) e.password = 'Password is required'
-    else if (password.length < 6) e.password = 'Password too short'
     setErrors(e)
     return Object.keys(e).length === 0
   }
@@ -39,7 +38,7 @@ export default function LoginForm() {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, isAdmin }),
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password, isAdmin }),
       })
       const data = await res.json()
 
@@ -50,10 +49,10 @@ export default function LoginForm() {
           router.refresh()
         }, 800)
       } else {
-        setErrors({ general: data.error })
+        setErrors({ general: data.error || 'Login failed. Please try again.' })
       }
     } catch {
-      setErrors({ general: 'Network error. Please try again.' })
+      setErrors({ general: 'Network error. Please check your connection.' })
     } finally {
       setLoading(false)
     }
@@ -61,55 +60,58 @@ export default function LoginForm() {
 
   return (
     <AuthCard
-      title={isAdmin ? '👑 Admin Login' : '🌸 Welcome Back!'}
-      subtitle={isAdmin ? 'Sign in to your admin dashboard' : 'Sign in to your account to continue'}
+      title={isAdmin ? 'Admin Sign In' : 'Welcome Back'}
+      subtitle={isAdmin ? 'Access your admin dashboard' : 'Sign in to your account'}
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         {errors.general && (
-          <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 text-red-600 text-sm flex items-center gap-2 animate-fade-in">
-            <span>⚠️</span> {errors.general}
+          <div className="animate-fade-in" style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 12, padding: '12px 14px' }}>
+            <AlertCircle size={16} style={{ color: '#DC2626', flexShrink: 0, marginTop: 1 }} />
+            <span style={{ fontSize: 13, color: '#991B1B', lineHeight: 1.5 }}>{errors.general}</span>
           </div>
         )}
         {success && (
-          <div className="bg-green-50 border border-green-200 rounded-2xl px-4 py-3 text-green-600 text-sm flex items-center gap-2 animate-fade-in">
-            <span>✅</span> Login successful! Redirecting...
+          <div className="animate-fade-in" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 12, padding: '12px 14px' }}>
+            <CheckCircle size={16} style={{ color: '#16A34A' }} />
+            <span style={{ fontSize: 13, color: '#166534' }}>Login successful — redirecting...</span>
           </div>
         )}
 
         <FloatingInput label="Email address" type="email" value={email}
           onChange={e => { setEmail(e.target.value); setErrors(p => ({ ...p, email: undefined })) }}
-          error={errors.email} icon={<Mail size={18} />} autoComplete="email" />
+          error={errors.email} icon={<Mail size={16} />} autoComplete="email" />
 
         <FloatingInput label="Password" type="password" value={password}
           onChange={e => { setPassword(e.target.value); setErrors(p => ({ ...p, password: undefined })) }}
-          error={errors.password} icon={<Lock size={18} />} autoComplete="current-password" />
+          error={errors.password} icon={<Lock size={16} />} autoComplete="current-password" />
 
-        <div className="text-right">
+        <div style={{ textAlign: 'right', marginTop: -8 }}>
           <Link href={isAdmin ? '/forgot-password?admin=1' : '/forgot-password'}
-            className="text-sm text-rose-400 hover:text-rose-600 transition-colors font-medium">
+            style={{ fontSize: 13, color: '#8B6914', fontWeight: 500, textDecoration: 'none' }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#5C3D11'}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#8B6914'}>
             Forgot password?
           </Link>
         </div>
 
         <BubbleButton type="submit" variant="primary" size="lg" fullWidth loading={loading} disabled={success}>
-          <Sparkles size={18} />
           {isAdmin ? 'Sign In to Dashboard' : 'Sign In'}
         </BubbleButton>
 
         {!isAdmin && (
           <>
-            <div className="flex items-center gap-3 my-2">
-              <div className="flex-1 h-px bg-rose-100" />
-              <span className="text-rose-300 text-xs font-medium">or continue as</span>
-              <div className="flex-1 h-px bg-rose-100" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '4px 0' }}>
+              <div style={{ flex: 1, height: 1, background: '#EDD4B2' }} />
+              <span style={{ fontSize: 12, color: '#B8934A', fontWeight: 500 }}>or</span>
+              <div style={{ flex: 1, height: 1, background: '#EDD4B2' }} />
             </div>
             <BubbleButton type="button" variant="secondary" size="md" fullWidth onClick={() => router.push('/')}>
-              👀 Browse as Guest
+              Continue as Guest
             </BubbleButton>
-            <p className="text-center text-sm text-rose-400 mt-2">
+            <p style={{ textAlign: 'center', fontSize: 13, color: '#9E7E5A', margin: 0 }}>
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-rose-500 font-semibold hover:text-rose-700 transition-colors underline underline-offset-2">
-                Sign up for free
+              <Link href="/signup" style={{ color: '#5C3D11', fontWeight: 700, textDecoration: 'none' }}>
+                Create one
               </Link>
             </p>
           </>

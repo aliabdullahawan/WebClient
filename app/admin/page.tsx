@@ -34,7 +34,7 @@ export default function AdminDashboard() {
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="text-center space-y-3">
-        <div className="text-5xl animate-bounce">🧶</div>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"center"}}></div>
         <p className="text-rose-400 text-sm">Loading dashboard...</p>
       </div>
     </div>

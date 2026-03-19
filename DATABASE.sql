@@ -581,11 +581,12 @@ INSERT INTO site_settings (key, value) VALUES
 ON CONFLICT (key) DO NOTHING;
 
 -- Admin account: email=amnamubeen516@gmail.com | password=Admin@123
+-- Hash generated with bcryptjs (NOT pgcrypto crypt) for Node.js compatibility
 -- bcrypt hash of 'Admin@123' with cost 10
 INSERT INTO admins (email, password_hash, full_name)
 VALUES (
   'amnamubeen516@gmail.com',
-  crypt('Admin@123', gen_salt('bf', 10)),
+  '$2b$12$krudfF6rWZ2M7zW6OOg.eeyeN5uD5J/T8HgIUzipkma./2lp5yXxO',
   'Amna Mubeen'
 ) ON CONFLICT (email) DO NOTHING;
 

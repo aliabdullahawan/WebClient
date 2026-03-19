@@ -1,9 +1,14 @@
 import { Suspense } from 'react'
 import LoginForm from '@/app/login/LoginForm'
+import { LumaSpin } from '@/components/ui/LumaSpin'
 
 export default function AdminLoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{background:'linear-gradient(135deg,#fdf2f8,#fff1f2)'}}><div className="text-5xl animate-bounce">🧶</div></div>}>
+    <Suspense fallback={
+      <div style={{ minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', background:'linear-gradient(160deg,#FEFCF7,#F9EDD8)' }}>
+        <LumaSpin size={48} color="#8B6914" />
+      </div>
+    }>
       <LoginForm />
     </Suspense>
   )
