@@ -1,13 +1,34 @@
-import bcrypt from 'bcryptjs'
+import { createHash, randomBytes, timingSafeEqual } from 'crypto'
 import { createServiceClient } from './supabase/server'
 import type { User, Admin } from '@/types'
 
-export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 12)
+// Use Node.js built-in crypto — no external dependencies, works everywhere
+// SHA-256 with salt: "SALT$hash"
+export function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString('hex')
+  const hash = createHash('sha256').update(salt + password).digest('hex')
+  return `${salt}$${hash}`
 }
 
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return bcrypt.compare(password, hash)
+export function verifyPassword(password: string, stored: string): boolean {
+  try {
+    // Handle both our format (salt$hash) and legacy bcrypt hashes ($2b$...)
+    if (stored.startsWith('$2b$') || stored.startsWith('$2a$')) {
+      // Legacy bcrypt — can't verify without bcryptjs, return false to force re-setup
+      console.warn('Legacy bcrypt hash detected — please run setup endpoint')
+      return false
+    }
+    const [salt, hash] = stored.split('$')
+    if (!salt || !hash) return false
+    const attempt = createHash('sha256').update(salt + password).digest('hex')
+    // Constant-time comparison
+    const a = Buffer.from(attempt, 'hex')
+    const b = Buffer.from(hash, 'hex')
+    if (a.length !== b.length) return false
+    return timingSafeEqual(a, b)
+  } catch {
+    return false
+  }
 }
 
 export function generateOTP(): string {
@@ -15,69 +36,7 @@ export function generateOTP(): string {
 }
 
 export function getOTPExpiry(): Date {
-  return new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
-}
-
-export async function getUserByEmail(email: string): Promise<User | null> {
-  const supabase = createServiceClient()
-  const { data, error } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', email.toLowerCase())
-    .single()
-  if (error || !data) return null
-  return data as User
-}
-
-export async function getAdminByEmail(email: string): Promise<Admin | null> {
-  const supabase = createServiceClient()
-  const { data, error } = await supabase
-    .from('admins')
-    .select('*')
-    .eq('email', email.toLowerCase())
-    .single()
-  if (error || !data) return null
-  return data as Admin
-}
-
-export async function validateUserLogin(email: string, password: string) {
-  const supabase = createServiceClient()
-  const { data: user } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', email.toLowerCase())
-    .single()
-
-  if (!user) return { success: false, error: 'Invalid email or password' }
-  if (user.is_blocked) return { success: false, error: 'Your account has been blocked. Contact support.' }
-  if (!user.password_hash) return { success: false, error: 'Please login with Google' }
-
-  const valid = await verifyPassword(password, user.password_hash)
-  if (!valid) return { success: false, error: 'Invalid email or password' }
-
-  return { success: true, user }
-}
-
-export async function validateAdminLogin(email: string, password: string) {
-  const supabase = createServiceClient()
-  const { data: admin } = await supabase
-    .from('admins')
-    .select('*')
-    .eq('email', email.toLowerCase())
-    .single()
-
-  if (!admin) return { success: false, error: 'Invalid email or password' }
-
-  // Use raw SQL to verify bcrypt password stored via pgcrypto
-  const { data: result } = await supabase
-    .rpc('verify_admin_password', { p_email: email, p_password: password })
-    .single()
-
-  // Fallback: compare with bcryptjs if rpc not available
-  const valid = result ?? (await verifyPassword(password, admin.password_hash))
-  if (!valid) return { success: false, error: 'Invalid email or password' }
-
-  return { success: true, admin }
+  return new Date(Date.now() + 10 * 60 * 1000)
 }
 
 export function isValidEmail(email: string): boolean {
@@ -86,8 +45,22 @@ export function isValidEmail(email: string): boolean {
 
 export function isValidPassword(password: string): { valid: boolean; message?: string } {
   if (password.length < 8) return { valid: false, message: 'Password must be at least 8 characters' }
-  if (!/(?=.*[a-z])/.test(password)) return { valid: false, message: 'Password must contain a lowercase letter' }
-  if (!/(?=.*[A-Z])/.test(password)) return { valid: false, message: 'Password must contain an uppercase letter' }
-  if (!/(?=.*\d)/.test(password)) return { valid: false, message: 'Password must contain a number' }
+  if (!/(?=.*[a-z])/.test(password)) return { valid: false, message: 'Password must include a lowercase letter' }
+  if (!/(?=.*[A-Z])/.test(password)) return { valid: false, message: 'Password must include an uppercase letter' }
+  if (!/(?=.*\d)/.test(password)) return { valid: false, message: 'Password must include a number' }
   return { valid: true }
+}
+
+export async function getUserByEmail(email: string): Promise<User | null> {
+  const supabase = createServiceClient()
+  const { data, error } = await supabase.from('users').select('*').eq('email', email.toLowerCase()).single()
+  if (error || !data) return null
+  return data as User
+}
+
+export async function getAdminByEmail(email: string): Promise<Admin | null> {
+  const supabase = createServiceClient()
+  const { data, error } = await supabase.from('admins').select('*').eq('email', email.toLowerCase()).single()
+  if (error || !data) return null
+  return data as Admin
 }

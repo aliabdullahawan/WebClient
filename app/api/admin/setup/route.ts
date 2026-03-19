@@ -5,7 +5,7 @@ import { hashPassword } from '@/lib/auth'
 export async function GET() {
   try {
     const supabase = createServiceClient()
-    const passwordHash = await hashPassword('Admin@123')
+    const passwordHash = hashPassword('Admin@123')
 
     const { data, error } = await supabase
       .from('admins')

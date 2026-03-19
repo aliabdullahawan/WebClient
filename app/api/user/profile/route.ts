@@ -44,7 +44,7 @@ export async function PATCH(req: NextRequest) {
   if (new_password) {
     const pwCheck = isValidPassword(new_password)
     if (!pwCheck.valid) return NextResponse.json({ error: pwCheck.message }, { status: 400 })
-    updates.password_hash = await hashPassword(new_password)
+    updates.password_hash = hashPassword(new_password)
   }
 
   const { error } = await supabase.from('users').update(updates).eq('id', session.id)

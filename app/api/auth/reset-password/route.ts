@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     const expiry = new Date(record.otp_expires_at)
     if (now > expiry) return NextResponse.json({ error: 'OTP has expired. Please request a new one.' }, { status: 400 })
 
-    const password_hash = await hashPassword(new_password)
+    const password_hash = hashPassword(new_password)
 
     await supabase
       .from(table)
