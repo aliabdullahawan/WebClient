@@ -1,63 +1,35 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { BubbleButton } from '@/components/ui/BubbleButton'
-import { Sparkles, MessageCircle } from 'lucide-react'
 
 export function CtaBanner() {
   const router = useRouter()
-
   return (
-    <section className="py-14 sm:py-20 px-4 sm:px-6 relative overflow-hidden">
-      {/* BG */}
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #fdf2f8 0%, #fff1f2 50%, #fce7f3 100%)' }} />
-
-      {/* Decorative circles */}
-      <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full opacity-20 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #fb7185, transparent)' }} />
-      <div className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full opacity-15 pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #ec4899, transparent)' }} />
-
-      {/* Floating emojis */}
-      {['🌸', '🧶', '💕', '✨', '🎀'].map((e, i) => (
-        <span key={i} className="absolute text-2xl sm:text-3xl opacity-20 pointer-events-none animate-float select-none"
-          style={{
-            left: `${8 + i * 22}%`,
-            top: `${20 + (i % 2) * 40}%`,
-            animationDelay: `${i * 0.5}s`,
-          }}>
-          {e}
-        </span>
-      ))}
-
-      <div className="relative max-w-2xl mx-auto text-center">
-        <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-rose-200 rounded-full px-4 py-1.5 mb-5 shadow-sm">
-          <Sparkles size={14} className="text-rose-400" />
-          <span className="text-xs font-bold text-rose-500 tracking-wide">CUSTOM ORDERS OPEN</span>
+    <section style={{ padding: '72px 20px', position: 'relative', overflow: 'hidden', background: 'linear-gradient(160deg, #FEFCF7, #F9EDD8)' }}>
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', background: 'radial-gradient(circle, rgba(200,169,110,0.12), transparent)' }} />
+        <div style={{ position: 'absolute', bottom: -60, left: -60, width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle, rgba(92,61,17,0.08), transparent)' }} />
+      </div>
+      <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(10px)', border: '1px solid #E2C090', borderRadius: 20, padding: '5px 16px', marginBottom: 20 }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#C8A96E' }} />
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#8B6914', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Custom Orders Open</span>
         </div>
-
-        <h2 className="text-3xl sm:text-4xl font-black text-[#3d1520] mb-4 leading-tight">
-          Want something
-          <br />
-          <span style={{ background: 'linear-gradient(135deg,#f43f5e,#ec4899)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-            made just for you?
+        <h2 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 900, color: '#2C1810', lineHeight: 1.1, margin: '0 0 16px' }}>
+          Want something made<br />
+          <span style={{ background: 'linear-gradient(135deg, #C8A96E, #8B6914)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            just for you?
           </span>
-          <span className="inline-block ml-2">🎀</span>
         </h2>
-
-        <p className="text-rose-400 text-base sm:text-lg mb-8 max-w-md mx-auto leading-relaxed">
-          Share your dream design and we&apos;ll bring it to life with our expert crochet craftsmanship.
+        <p style={{ color: '#9E7E5A', fontSize: 15, lineHeight: 1.7, margin: '0 0 28px', maxWidth: 400, marginLeft: 'auto', marginRight: 'auto' }}>
+          Share your dream design and we will bring it to life with expert crochet craftsmanship.
         </p>
-
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <BubbleButton variant="primary" size="lg" onClick={() => router.push('/custom')}>
-            <Sparkles size={18} /> Start Custom Order
-          </BubbleButton>
-          <BubbleButton
-            variant="secondary" size="lg"
-            onClick={() => window.open('https://wa.me/923159202186', '_blank')}
-          >
-            <MessageCircle size={18} /> Chat on WhatsApp
-          </BubbleButton>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
+          <button className="btn-primary" onClick={() => router.push('/custom')}>
+            Start Custom Order
+          </button>
+          <button className="btn-secondary" onClick={() => window.open('https://wa.me/923159202186', '_blank')}>
+            Chat on WhatsApp
+          </button>
         </div>
       </div>
     </section>

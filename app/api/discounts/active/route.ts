@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createServiceClient, createAnonClient } from '@/lib/supabase/server'
 
 export async function GET() {
   try {
-    const supabase = createServiceClient()
+    const supabase = createAnonClient()
     const { data } = await supabase
       .from('v_active_discounts')
       .select('*')

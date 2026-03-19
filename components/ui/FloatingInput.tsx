@@ -9,87 +9,47 @@ interface FloatingInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const FloatingInput = forwardRef<HTMLInputElement, FloatingInputProps>(
-  ({ label, error, icon, type, className = '', ...props }, ref) => {
-    const [showPassword, setShowPassword] = useState(false)
+  ({ label, error, icon, type, ...props }, ref) => {
+    const [showPw, setShowPw] = useState(false)
     const [focused, setFocused] = useState(false)
     const isPassword = type === 'password'
-    const inputType = isPassword ? (showPassword ? 'text' : 'password') : type
+    const inputType = isPassword ? (showPw ? 'text' : 'password') : type
 
     return (
       <div className="relative group">
-        {/* Glow background */}
-        <div
-          className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-rose-400 to-pink-400 blur-sm transition-opacity duration-300 -z-10 ${
-            focused ? 'opacity-25' : 'opacity-0'
-          }`}
-        />
-
-        {/* Input wrapper */}
-        <div
-          className={`relative flex items-center bg-rose-50 rounded-2xl border-[1.5px] transition-all duration-200 overflow-hidden ${
-            focused
-              ? 'border-rose-400 bg-white shadow-[0_0_0_3px_rgba(251,113,133,0.12)]'
-              : error
-              ? 'border-red-300 bg-red-50'
-              : 'border-rose-200 hover:border-rose-300'
-          }`}
-        >
-          {icon && (
-            <span className={`pl-4 text-rose-400 transition-colors duration-200 ${focused ? 'text-rose-500' : ''}`}>
-              {icon}
-            </span>
-          )}
-          <div className="relative flex-1">
-            <input
-              ref={ref}
-              type={inputType}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setFocused(false)}
+        {focused && (
+          <div style={{ position: 'absolute', inset: -2, borderRadius: 18, background: 'linear-gradient(135deg,#C8A96E,#8B6914)', opacity: 0.2, zIndex: -1, filter: 'blur(6px)' }} />
+        )}
+        <div style={{
+          display: 'flex', alignItems: 'center', background: focused ? 'white' : '#F9EDD8',
+          borderRadius: 16, border: `1.5px solid ${error ? '#c0392b' : focused ? '#C8A96E' : '#EDD4B2'}`,
+          boxShadow: focused ? '0 0 0 3px rgba(200,169,110,0.18)' : 'none',
+          transition: 'all 0.2s ease', overflow: 'hidden',
+        }}>
+          {icon && <span style={{ paddingLeft: 14, color: focused ? '#8B6914' : '#B8934A', flexShrink: 0 }}>{icon}</span>}
+          <div style={{ position: 'relative', flex: 1 }}>
+            <input ref={ref} type={inputType}
+              onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
               placeholder=" "
-              className={`
-                peer w-full px-4 pt-6 pb-2 bg-transparent text-[#3d1520] text-[15px]
-                outline-none placeholder-transparent
-                disabled:opacity-60 disabled:cursor-not-allowed
-                ${!icon ? '' : '!pl-2'}
-              `}
-              {...props}
-            />
-            {/* Floating label */}
-            <label
-              className={`
-                absolute left-4 top-1/2 -translate-y-1/2 text-rose-400 text-[15px]
-                transition-all duration-200 pointer-events-none origin-left
-                peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-[15px] peer-placeholder-shown:text-rose-300
-                peer-focus:top-3 peer-focus:text-xs peer-focus:text-rose-500
-                peer-[&:not(:placeholder-shown)]:top-3 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:text-rose-400
-                ${!icon ? '' : '!left-2'}
-              `}
-            >
+              style={{ width: '100%', padding: icon ? '22px 14px 6px 10px' : '22px 14px 6px 14px', background: 'transparent', color: '#2C1810', fontSize: 15, outline: 'none', border: 'none' }}
+              {...props} />
+            <label style={{
+              position: 'absolute', left: icon ? 10 : 14, top: '50%', transform: 'translateY(-50%)',
+              color: '#B8934A', fontSize: 15, pointerEvents: 'none', transition: 'all 0.18s ease',
+              ...(focused || (props.value && String(props.value).length > 0) ? { top: '30%', fontSize: 11, color: '#9E7E5A', fontWeight: 600, letterSpacing: '0.03em' } : {}),
+            }}>
               {label}
             </label>
           </div>
-
           {isPassword && (
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="pr-4 text-rose-300 hover:text-rose-500 transition-colors"
-              tabIndex={-1}
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            <button type="button" onClick={() => setShowPw(!showPw)} style={{ paddingRight: 14, color: '#B8934A', background: 'none', border: 'none', cursor: 'pointer' }}>
+              {showPw ? <EyeOff size={17} /> : <Eye size={17} />}
             </button>
           )}
         </div>
-
-        {/* Error message */}
-        {error && (
-          <p className="mt-1.5 text-xs text-red-500 flex items-center gap-1 pl-1">
-            <span>⚠️</span> {error}
-          </p>
-        )}
+        {error && <p style={{ marginTop: 5, fontSize: 12, color: '#922b21', paddingLeft: 4 }}>⚠ {error}</p>}
       </div>
     )
   }
 )
-
 FloatingInput.displayName = 'FloatingInput'

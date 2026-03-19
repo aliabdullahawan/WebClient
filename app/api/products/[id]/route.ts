@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createServiceClient, createAnonClient } from '@/lib/supabase/server'
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params
-    const supabase = createServiceClient()
+    const supabase = createAnonClient()
     const { data: product, error } = await supabase
       .from('products')
       .select(`id, name, description, price, category_id, tags, is_featured, show_on_hero, is_active, average_rating, review_count, created_at,

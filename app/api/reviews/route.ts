@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createServiceClient, createAnonClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 
 async function getUserId() {
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   if (!userId) return NextResponse.json({ error: 'Sign in to leave a review' }, { status: 401 })
   const { product_id, rating, comment } = await req.json()
   if (!product_id || !rating || rating < 1 || rating > 5) return NextResponse.json({ error: 'Invalid review data' }, { status: 400 })
-  const supabase = createServiceClient()
+  const supabase = createAnonClient()
   const { data: existing } = await supabase.from('reviews').select('id').eq('user_id', userId).eq('product_id', product_id).single()
   if (existing) return NextResponse.json({ error: 'You have already reviewed this product' }, { status: 409 })
   const { data, error } = await supabase.from('reviews').insert({ user_id: userId, product_id, rating, comment: comment?.trim() || null }).select().single()

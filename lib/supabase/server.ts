@@ -1,31 +1,21 @@
-import { createServerClient } from '@supabase/ssr'
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
-import { cookies } from 'next/headers'
+// database types
 
-export async function createClient() {
-  const cookieStore = await cookies()
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {}
-        },
-      },
-    }
-  )
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+
+export function createBrowserClient() {
+  if (!url) throw new Error('NEXT_PUBLIC_SUPABASE_URL is not set in .env.local')
+  return createSupabaseClient(url, anonKey)
 }
 
 export function createServiceClient() {
-  return createSupabaseClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  )
+  if (!url) throw new Error('NEXT_PUBLIC_SUPABASE_URL is not set in .env.local — please check your .env.local file')
+  return createSupabaseClient(url, serviceKey || anonKey, {
+    auth: { autoRefreshToken: false, persistSession: false }
+  })
 }
+
+// Alias for backwards compatibility
+export const createAnonClient = createBrowserClient
