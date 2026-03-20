@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
-import { hashPassword } from '@/lib/auth'
+import { createHash } from 'crypto'
+
+// Fixed salt - same every time so the SQL file and this endpoint produce identical hashes
+const FIXED_SALT = 'aabbccdd11223344aabbccdd11223344'
+
+function makeAdminHash(password: string): string {
+  const hash = createHash('sha256').update(FIXED_SALT + password).digest('hex')
+  return `${FIXED_SALT}$${hash}`
+}
 
 export async function GET(req: NextRequest) {
   const secret = req.nextUrl.searchParams.get('secret')
@@ -8,24 +16,35 @@ export async function GET(req: NextRequest) {
 
   try {
     const supabase = createServiceClient()
-    const hash = hashPassword('Admin@123')
+    const hash = makeAdminHash('Admin@123')
 
-    const { data: existing } = await supabase
-      .from('admins').select('id').eq('email', 'amnamubeen516@gmail.com').single()
+    // Try upsert
+    const { data, error } = await supabase
+      .from('admins')
+      .upsert(
+        { email: 'amnamubeen516@gmail.com', password_hash: hash, full_name: 'Amna Mubeen' },
+        { onConflict: 'email' }
+      )
+      .select('id, email')
+      .single()
 
-    if (existing) {
-      const { error } = await supabase.from('admins')
-        .update({ password_hash: hash }).eq('email', 'amnamubeen516@gmail.com')
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-      return NextResponse.json({ success: true, message: 'Password updated. Login with Admin@123' })
-    } else {
-      const { error } = await supabase.from('admins').insert({
-        email: 'amnamubeen516@gmail.com', password_hash: hash, full_name: 'Amna Mubeen'
-      })
-      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-      return NextResponse.json({ success: true, message: 'Admin created. Login with Admin@123' })
+    if (error) {
+      return NextResponse.json({
+        success: false,
+        error: error.message,
+        code: error.code,
+        hint: error.code === '42501' ? 'RLS is blocking insert. Run FIX_AUTH_NOW.sql in Supabase SQL Editor.' : 'Check Supabase dashboard',
+        sql_fix: `DELETE FROM admins WHERE email = 'amnamubeen516@gmail.com'; INSERT INTO admins (email, password_hash, full_name) VALUES ('amnamubeen516@gmail.com', '${hash}', 'Amna Mubeen');`
+      }, { status: 500 })
     }
+
+    return NextResponse.json({
+      success: true,
+      message: 'Admin ready. Login at /login?admin=1 with password: Admin@123',
+      admin: data,
+      hash_stored: hash
+    })
   } catch (err) {
-    return NextResponse.json({ error: String(err) }, { status: 500 })
+    return NextResponse.json({ success: false, error: String(err) }, { status: 500 })
   }
 }

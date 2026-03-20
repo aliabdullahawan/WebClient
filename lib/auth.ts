@@ -1,31 +1,31 @@
-import { createHash, randomBytes, timingSafeEqual } from 'crypto'
+import { createHash, randomBytes } from 'crypto'
 import { createServiceClient } from './supabase/server'
 import type { User, Admin } from '@/types'
 
-// Use Node.js built-in crypto — no external dependencies, works everywhere
-// SHA-256 with salt: "SALT$hash"
+// Format: SALT$SHA256(salt+password)
+// SALT = 32 hex chars (16 random bytes)
+// HASH = 64 hex chars (SHA-256 output)
 export function hashPassword(password: string): string {
-  const salt = randomBytes(16).toString('hex')
-  const hash = createHash('sha256').update(salt + password).digest('hex')
-  return `${salt}$${hash}`
+  const salt = randomBytes(16).toString('hex') // 32 chars
+  const hash = createHash('sha256').update(salt + password).digest('hex') // 64 chars
+  return `${salt}$${hash}` // 97 chars total
 }
 
 export function verifyPassword(password: string, stored: string): boolean {
   try {
-    // Handle both our format (salt$hash) and legacy bcrypt hashes ($2b$...)
-    if (stored.startsWith('$2b$') || stored.startsWith('$2a$')) {
-      // Legacy bcrypt — can't verify without bcryptjs, return false to force re-setup
-      console.warn('Legacy bcrypt hash detected — please run setup endpoint')
-      return false
-    }
-    const [salt, hash] = stored.split('$')
-    if (!salt || !hash) return false
+    if (!stored || typeof stored !== 'string') return false
+
+    // Must contain exactly one $
+    const dollarIdx = stored.indexOf('$')
+    if (dollarIdx === -1) return false
+
+    const salt = stored.substring(0, dollarIdx)
+    const storedHash = stored.substring(dollarIdx + 1)
+
+    if (!salt || !storedHash) return false
+
     const attempt = createHash('sha256').update(salt + password).digest('hex')
-    // Constant-time comparison
-    const a = Buffer.from(attempt, 'hex')
-    const b = Buffer.from(hash, 'hex')
-    if (a.length !== b.length) return false
-    return timingSafeEqual(a, b)
+    return attempt === storedHash
   } catch {
     return false
   }
