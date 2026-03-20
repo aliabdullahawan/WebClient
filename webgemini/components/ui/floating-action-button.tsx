@@ -34,7 +34,7 @@ export function AnimatedSocialIcons({
           animate={{
             x: active ? "calc(100% + 16px)" : 0,
           }}
-          transition={{ type: "ease-in", duration: 0.5 }}
+          transition={{ ease: "easeIn", duration: 0.5 }}
         >
           <motion.button
             className={cn(
@@ -45,7 +45,7 @@ export function AnimatedSocialIcons({
             onClick={() => setActive(!active)}
             animate={{ rotate: active ? 45 : 0 }}
             transition={{
-              type: "ease-in",
+              ease: "easeIn",
               duration: 0.5,
             }}
           >
@@ -73,7 +73,7 @@ export function AnimatedSocialIcons({
               rotate: active ? 0 : 45,
             }}
             transition={{
-              type: "ease-in",
+              ease: "easeIn",
               duration: 0.4,
             }}
           >
