@@ -3,13 +3,8 @@ import { useState, useEffect, createContext, useContext, useCallback } from 'rea
 import { useRouter } from 'next/navigation'
 
 interface SessionUser {
-  id: string
-  email: string
-  name: string
-  role: 'user' | 'admin'
-  avatar_id?: string
+  id: string; email: string; name: string; role: 'user' | 'admin'; avatar_id?: string
 }
-
 interface AuthContextType {
   user: SessionUser | null
   loading: boolean
@@ -30,11 +25,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch('/api/auth/session')
       const data = await res.json()
       setUser(data.authenticated ? data.user : null)
-    } catch {
-      setUser(null)
-    } finally {
-      setLoading(false)
-    }
+    } catch { setUser(null) }
+    finally { setLoading(false) }
   }, [])
 
   useEffect(() => { refresh() }, [refresh])
@@ -42,25 +34,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string, isAdmin = false) => {
     try {
       const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, isAdmin }),
       })
       const data = await res.json()
-      if (data.success) {
-        setUser(data.user)
-        return { success: true }
-      }
+      if (data.success) { setUser(data.user); return { success: true } }
       return { success: false, error: data.error }
-    } catch {
-      return { success: false, error: 'Network error. Please try again.' }
-    }
+    } catch { return { success: false, error: 'Network error.' } }
   }
 
   const logout = async () => {
-    await fetch('/api/auth/logout', { method: 'POST' })
+    // Clear only the current role's session, allow switching
+    await fetch('/api/auth/logout', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role: user?.role }),
+    })
     setUser(null)
-    router.push('/')
+    if (user?.role === 'admin') router.push('/login?admin=1')
+    else router.push('/')
   }
 
   return (

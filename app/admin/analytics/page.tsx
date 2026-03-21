@@ -32,7 +32,7 @@ export default function AdminAnalytics() {
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center space-y-3"><div className="text-5xl animate-bounce">📊</div>
+      <div className="text-center space-y-3"><div className="text-5xl animate-bounce"></div>
         <p className="text-rose-400 text-sm">Loading analytics...</p></div>
     </div>
   )
@@ -67,7 +67,7 @@ export default function AdminAnalytics() {
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#3d1520]">Analytics 📊</h1>
+          <h1 className="text-2xl font-black text-[#3d1520]">Analytics </h1>
           <p className="text-rose-400 text-sm">Business performance overview</p>
         </div>
         <div className="flex gap-1">
@@ -83,10 +83,10 @@ export default function AdminAnalytics() {
       {/* Summary cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
-          { label: `Revenue (${period}d)`, value: `₨${totalRevPeriod >= 1000 ? (totalRevPeriod/1000).toFixed(1)+'K' : totalRevPeriod}`, icon: '💰', color: 'from-green-400 to-emerald-500' },
-          { label: `Orders (${period}d)`, value: totalOrdPeriod, icon: '📦', color: 'from-blue-400 to-indigo-500' },
-          { label: 'Avg/Day', value: `₨${avgRevPerDay >= 1000 ? (avgRevPerDay/1000).toFixed(1)+'K' : Math.round(avgRevPerDay)}`, icon: '📈', color: 'from-rose-400 to-pink-500' },
-          { label: 'Total Revenue', value: `₨${stats.totalRevenue >= 1000 ? (stats.totalRevenue/1000).toFixed(1)+'K' : stats.totalRevenue}`, icon: '🏆', color: 'from-amber-400 to-orange-500' },
+          { label: `Revenue (${period}d)`, value: `₨${totalRevPeriod >= 1000 ? (totalRevPeriod/1000).toFixed(1)+'K' : totalRevPeriod}`, icon: '', color: 'from-green-400 to-emerald-500' },
+          { label: `Orders (${period}d)`, value: totalOrdPeriod, icon: '', color: 'from-blue-400 to-indigo-500' },
+          { label: 'Avg/Day', value: `₨${avgRevPerDay >= 1000 ? (avgRevPerDay/1000).toFixed(1)+'K' : Math.round(avgRevPerDay)}`, icon: '', color: 'from-rose-400 to-pink-500' },
+          { label: 'Total Revenue', value: `₨${stats.totalRevenue >= 1000 ? (stats.totalRevenue/1000).toFixed(1)+'K' : stats.totalRevenue}`, icon: '', color: 'from-amber-400 to-orange-500' },
         ].map(s => (
           <div key={s.label} className="bg-white rounded-2xl p-4 border border-rose-100 shadow-sm">
             <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-lg mb-3 shadow-sm`}>{s.icon}</div>

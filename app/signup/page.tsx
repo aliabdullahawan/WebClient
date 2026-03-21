@@ -75,18 +75,18 @@ export default function SignupPage() {
 
   return (
     <AuthCard
-      title="🌸 Create Account"
+      title=" Create Account"
       subtitle="Join Crochet Masterpiece today!"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {errors.general && (
           <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 text-red-600 text-sm flex items-center gap-2 animate-fade-in">
-            <span>⚠️</span> {errors.general}
+            <span></span> {errors.general}
           </div>
         )}
         {success && (
           <div className="bg-green-50 border border-green-200 rounded-2xl px-4 py-3 text-green-600 text-sm flex items-center gap-2 animate-fade-in">
-            <span>🎉</span> Account created! Redirecting...
+            <span></span> Account created! Redirecting...
           </div>
         )}
 
@@ -151,15 +151,15 @@ export default function SignupPage() {
         </BubbleButton>
 
         <p className="text-center text-sm text-rose-400">
-          Already have an account?{' '}
+          Already have an account?{''}
           <Link href="/login" className="text-rose-500 font-semibold hover:text-rose-700 transition-colors underline underline-offset-2">
             Sign in
           </Link>
         </p>
 
         <p className="text-center text-xs text-rose-300 mt-1">
-          By signing up, you agree to our{' '}
-          <span className="text-rose-400 cursor-pointer hover:text-rose-600">Terms</span> &amp;{' '}
+          By signing up, you agree to our{''}
+          <span className="text-rose-400 cursor-pointer hover:text-rose-600">Terms</span> &amp;{''}
           <span className="text-rose-400 cursor-pointer hover:text-rose-600">Privacy Policy</span>
         </p>
       </form>

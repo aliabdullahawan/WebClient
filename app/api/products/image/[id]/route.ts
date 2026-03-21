@@ -11,14 +11,22 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
       .eq('id', id)
       .single()
 
-    if (error || !data || !data.image_data) {
+    if (error || !data?.image_data) return new NextResponse(null, { status: 404 })
+
+    let buffer: Buffer
+    const raw = data.image_data as unknown
+    if (Buffer.isBuffer(raw)) {
+      buffer = raw
+    } else if (typeof raw === 'string') {
+      // Supabase bytea comes as hex string: \x followed by hex
+      const hex = (raw as string).startsWith('\\x') ? (raw as string).slice(2) : raw as string
+      buffer = Buffer.from(hex, 'hex')
+    } else if (typeof raw === 'object' && raw !== null) {
+      // Could be array-like object
+      buffer = Buffer.from(Object.values(raw as object) as number[])
+    } else {
       return new NextResponse(null, { status: 404 })
     }
-
-    // image_data is stored as bytea - convert to buffer
-    const buffer = Buffer.isBuffer(data.image_data)
-      ? data.image_data
-      : Buffer.from(data.image_data as string, 'base64')
 
     return new NextResponse(new Uint8Array(buffer), {
       headers: {

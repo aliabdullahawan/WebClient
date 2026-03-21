@@ -71,7 +71,7 @@ export default function AdminUsers() {
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="mb-5">
-        <h1 className="text-2xl font-black text-[#3d1520]">Customers 👥</h1>
+        <h1 className="text-2xl font-black text-[#3d1520]">Customers </h1>
         <p className="text-rose-400 text-sm">{total} registered users</p>
       </div>
 
@@ -87,13 +87,13 @@ export default function AdminUsers() {
           {loading ? (
             <div className="space-y-2">{[...Array(6)].map((_, i) => <div key={i} className="skeleton h-20 rounded-2xl" />)}</div>
           ) : filteredUsers.length === 0 ? (
-            <div className="text-center py-12 text-rose-300"><div className="text-4xl mb-2">👥</div><p>No users found</p></div>
+            <div className="text-center py-12 text-rose-300"><div className="text-4xl mb-2"></div><p>No users found</p></div>
           ) : filteredUsers.map(u => (
             <div key={u.id} onClick={() => selectUser(u.id)}
               className={`bg-white rounded-2xl border cursor-pointer hover:border-rose-300 hover:shadow-sm transition-all p-4 ${selected?.id === u.id ? 'border-rose-400 shadow-md' : 'border-rose-100'}`}>
               <div className="flex items-center gap-3">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${u.is_blocked ? 'bg-red-400' : 'bg-gradient-to-br from-rose-400 to-pink-500'}`}>
-                  {u.is_blocked ? '🚫' : u.full_name?.charAt(0).toUpperCase()}
+                  {u.is_blocked ? '' : u.full_name?.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
@@ -139,9 +139,9 @@ export default function AdminUsers() {
               {/* Stats */}
               <div className="grid grid-cols-3 gap-3">
                 {[
-                  { label: 'Total Orders', value: selected.total_orders, icon: '📦' },
-                  { label: 'Delivered', value: selected.delivered_orders, icon: '✅' },
-                  { label: 'Cancelled', value: selected.cancelled_orders, icon: '❌' },
+                  { label: 'Total Orders', value: selected.total_orders, icon: '' },
+                  { label: 'Delivered', value: selected.delivered_orders, icon: '' },
+                  { label: 'Cancelled', value: selected.cancelled_orders, icon: '' },
                 ].map(s => (
                   <div key={s.label} className="bg-rose-50 rounded-2xl p-3 text-center">
                     <div className="text-xl mb-1">{s.icon}</div>
@@ -159,7 +159,7 @@ export default function AdminUsers() {
               {/* Contact */}
               {selected.phone && (
                 <div className="bg-rose-50/50 rounded-2xl p-3">
-                  <p className="text-xs font-bold text-rose-400 mb-1">📞 Phone</p>
+                  <p className="text-xs font-bold text-rose-400 mb-1"> Phone</p>
                   <p className="text-[#3d1520] text-sm font-medium">{selected.phone}</p>
                 </div>
               )}
@@ -167,7 +167,7 @@ export default function AdminUsers() {
               {/* Block/Unblock */}
               <BubbleButton variant={selected.is_blocked ? 'secondary' : 'danger'} size="sm" fullWidth
                 loading={blocking} onClick={toggleBlock}>
-                {selected.is_blocked ? <><Shield size={14} /> Unblock User</> : <>🚫 Block User</>}
+                {selected.is_blocked ? <><Shield size={14} /> Unblock User</> : <> Block User</>}
               </BubbleButton>
 
               {/* Send message */}

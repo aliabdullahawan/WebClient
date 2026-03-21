@@ -113,7 +113,7 @@ export default function AdminProducts() {
     <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#3d1520]">Products 🧶</h1>
+          <h1 className="text-2xl font-black text-[#3d1520]">Products </h1>
           <p className="text-rose-400 text-sm">{total} products total</p>
         </div>
         <BubbleButton variant="primary" size="sm" onClick={openNew}><Plus size={16} /> Add Product</BubbleButton>
@@ -132,7 +132,7 @@ export default function AdminProducts() {
           {[...Array(6)].map((_, i) => <div key={i} className="skeleton h-32 rounded-2xl" />)}
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-16 text-rose-300"><div className="text-5xl mb-3">🧶</div><p>No products yet</p></div>
+        <div className="text-center py-16 text-rose-300"><div className="text-5xl mb-3"></div><p>No products yet</p></div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map(p => (
@@ -141,7 +141,7 @@ export default function AdminProducts() {
                 <div className="w-14 h-14 rounded-xl bg-rose-50 flex items-center justify-center text-2xl shrink-0 overflow-hidden">
                   {p.primary_image_id
                     ? <img src={`/api/products/image/${p.primary_image_id}`} alt="" className="w-full h-full object-cover" onError={e => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                    : '🧶'}
+                    : ''}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold text-[#3d1520] text-sm line-clamp-1">{p.name}</p>
@@ -153,11 +153,11 @@ export default function AdminProducts() {
                 <div className="flex gap-2">
                   <button title="Featured" onClick={() => toggleField(p.id, 'is_featured', !p.is_featured)}
                     className={`text-[11px] px-2 py-1 rounded-full font-bold transition-all ${p.is_featured ? 'bg-amber-100 text-amber-600' : 'bg-rose-50 text-rose-300'}`}>
-                    ✨ {p.is_featured ? 'Featured' : 'Feature'}
+                     {p.is_featured ? 'Featured' : 'Feature'}
                   </button>
                   <button title="Hero" onClick={() => toggleField(p.id, 'show_on_hero', !p.show_on_hero)}
                     className={`text-[11px] px-2 py-1 rounded-full font-bold transition-all ${p.show_on_hero ? 'bg-purple-100 text-purple-600' : 'bg-rose-50 text-rose-300'}`}>
-                    🎬 {p.show_on_hero ? 'Hero' : 'Add Hero'}
+                     {p.show_on_hero ? 'Hero' : 'Add Hero'}
                   </button>
                 </div>
                 <div className="flex gap-1">
@@ -184,7 +184,7 @@ export default function AdminProducts() {
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-start justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-3xl p-6 w-full max-w-xl shadow-xl border border-rose-100 my-4 animate-scale-in">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="font-bold text-[#3d1520] text-lg">{editingId ? '✏️ Edit Product' : '➕ New Product'}</h3>
+              <h3 className="font-bold text-[#3d1520] text-lg">{editingId ? ' Edit Product' : ' New Product'}</h3>
               <button onClick={() => setShowForm(false)} className="p-2 hover:bg-rose-50 rounded-full text-rose-400"><X size={18} /></button>
             </div>
             <div className="space-y-4">
@@ -206,7 +206,7 @@ export default function AdminProducts() {
               </div>
               <FloatingInput label="Tags (comma-separated)" type="text" value={form.tags} onChange={e => setForm(f => ({ ...f, tags: e.target.value }))} icon={<Tag size={16} />} />
               <div className="flex gap-4">
-                {[{ key: 'is_featured', label: '✨ Featured' }, { key: 'show_on_hero', label: '🎬 Show on Hero' }].map(({ key, label }) => (
+                {[{ key: 'is_featured', label: ' Featured' }, { key: 'show_on_hero', label: ' Show on Hero' }].map(({ key, label }) => (
                   <button key={key} type="button" onClick={() => setForm(f => ({ ...f, [key]: !f[key as keyof typeof f] }))}
                     className={`flex items-center gap-2 px-4 py-2 rounded-full border-[1.5px] text-sm font-semibold transition-all ${(form as any)[key] ? 'bg-rose-500 border-rose-500 text-white' : 'border-rose-200 text-rose-400'}`}>
                     {(form as any)[key] ? <ToggleRight size={16} /> : <ToggleLeft size={16} />} {label}
@@ -229,7 +229,7 @@ export default function AdminProducts() {
       {deleteId && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-xl animate-scale-in">
-            <div className="text-4xl text-center mb-3">⚠️</div>
+            <div className="text-4xl text-center mb-3"></div>
             <h3 className="font-bold text-[#3d1520] text-center mb-1">Delete Product?</h3>
             <p className="text-rose-400 text-sm text-center mb-5">This will hide the product from the shop.</p>
             <div className="flex gap-3">

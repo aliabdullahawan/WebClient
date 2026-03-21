@@ -31,7 +31,7 @@ export default function ContactPage() {
     if (!form.message.trim()) e.message = 'Message is required'
     setErrors(e)
     if (Object.keys(e).length > 0) return
-    const msg = `👋 *Message from Website*\n\n*Name:* ${form.name}\n*Email:* ${form.email || 'Not provided'}\n*Message:* ${form.message}\n\n_Sent via Crochet Masterpiece website_ 🌸`
+    const msg = ` *Message from Website*\n\n*Name:* ${form.name}\n*Email:* ${form.email || 'Not provided'}\n*Message:* ${form.message}\n\n_Sent via Crochet Masterpiece website_ `
     window.open(`https://wa.me/923159202186?text=${encodeURIComponent(msg)}`, '_blank')
     setForm({ name: '', email: '', message: '' })
   }
@@ -42,11 +42,11 @@ export default function ContactPage() {
       <main className="flex-1 pt-20 pb-12 px-4 sm:px-6">
         {/* Header */}
         <div className="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 py-10 sm:py-14 text-center relative overflow-hidden -mx-4 sm:-mx-6 mb-10">
-          {['💕', '🌸', '✨', '🧶', '💌'].map((e, i) => (
+          {['', '', '', '', ''].map((e, i) => (
             <span key={i} className="absolute text-2xl opacity-20 animate-float select-none" style={{ left: `${5 + i * 22}%`, top: '50%', transform: 'translateY(-50%)', animationDelay: `${i * 0.4}s` }}>{e}</span>
           ))}
           <div className="relative z-10">
-            <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">Get in Touch 💌</h1>
+            <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">Get in Touch </h1>
             <p className="text-rose-100 text-sm sm:text-base">We&apos;d love to hear from you!</p>
           </div>
         </div>
@@ -130,10 +130,10 @@ export default function ContactPage() {
                       Your message *
                     </label>
                   </div>
-                  {errors.message && <p className="px-4 pb-2 text-xs text-red-500">⚠️ {errors.message}</p>}
+                  {errors.message && <p className="px-4 pb-2 text-xs text-red-500"> {errors.message}</p>}
                 </div>
                 <BubbleButton variant="primary" size="lg" fullWidth onClick={sendViaWhatsApp}>
-                  <span className="text-lg">💬</span> Send via WhatsApp
+                  <span className="text-lg"></span> Send via WhatsApp
                 </BubbleButton>
                 <p className="text-center text-xs text-rose-300">This opens WhatsApp with your message pre-filled</p>
               </div>

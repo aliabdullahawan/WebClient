@@ -51,7 +51,7 @@ export function ProductCard({ product, onWishlist, isWishlisted = false, size = 
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-6xl opacity-30">
-            🧶
+            
           </div>
         )}
 
@@ -71,7 +71,7 @@ export function ProductCard({ product, onWishlist, isWishlisted = false, size = 
         {/* Featured badge */}
         {product.is_featured && (
           <div className="absolute top-3 left-3 px-2 py-0.5 bg-gradient-to-r from-rose-400 to-pink-500 text-white text-[10px] font-bold rounded-full shadow-sm">
-            ✨ Featured
+             Featured
           </div>
         )}
 

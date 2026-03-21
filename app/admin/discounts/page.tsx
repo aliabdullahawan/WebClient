@@ -8,7 +8,7 @@ interface Discount { id: string; code: string; description?: string; percentage:
 interface Category { id: string; name: string }
 interface Product { id: string; name: string }
 
-const scopeLabels: Record<string, string> = { site_wide: '🌐 Site-wide', product: '📦 Product', category: '🗂️ Category' }
+const scopeLabels: Record<string, string> = { site_wide: ' Site-wide', product: ' Product', category: ' Category' }
 
 export default function AdminDiscounts() {
   const [discounts, setDiscounts] = useState<Discount[]>([])
@@ -64,7 +64,7 @@ export default function AdminDiscounts() {
     <div className="p-4 sm:p-6 max-w-5xl mx-auto space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#3d1520]">Discounts 🎀</h1>
+          <h1 className="text-2xl font-black text-[#3d1520]">Discounts </h1>
           <p className="text-rose-400 text-sm">{discounts.filter(d => d.is_active && !isExpired(d)).length} active discounts</p>
         </div>
         <BubbleButton variant="primary" size="sm" onClick={() => setShowForm(true)}><Plus size={16} /> New Discount</BubbleButton>
@@ -73,7 +73,7 @@ export default function AdminDiscounts() {
       {loading ? (
         <div className="space-y-3">{[...Array(4)].map((_, i) => <div key={i} className="skeleton h-24 rounded-2xl" />)}</div>
       ) : discounts.length === 0 ? (
-        <div className="text-center py-16 text-rose-300"><div className="text-5xl mb-3">🎀</div><p>No discounts created yet</p></div>
+        <div className="text-center py-16 text-rose-300"><div className="text-5xl mb-3"></div><p>No discounts created yet</p></div>
       ) : (
         <div className="space-y-3">
           {discounts.map(d => {
@@ -95,7 +95,7 @@ export default function AdminDiscounts() {
                       </div>
                       {d.description && <p className="text-rose-400 text-xs mt-0.5">{d.description}</p>}
                       <div className="flex gap-3 mt-1.5 text-xs text-rose-300">
-                        {(d.product_name || d.category_name) && <span>📦 {d.product_name || d.category_name}</span>}
+                        {(d.product_name || d.category_name) && <span> {d.product_name || d.category_name}</span>}
                         <span>Used: {d.usage_count}{d.max_usage ? `/${d.max_usage}` : ''}</span>
                         {d.end_date && <span>Expires: {new Date(d.end_date).toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
                       </div>
@@ -122,7 +122,7 @@ export default function AdminDiscounts() {
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-white rounded-3xl p-6 w-full max-w-md shadow-xl border border-rose-100 my-4 animate-scale-in">
             <div className="flex items-center justify-between mb-5">
-              <h3 className="font-bold text-[#3d1520] text-lg">➕ New Discount Code</h3>
+              <h3 className="font-bold text-[#3d1520] text-lg"> New Discount Code</h3>
               <button onClick={() => setShowForm(false)} className="p-2 hover:bg-rose-50 rounded-full text-rose-400"><X size={18} /></button>
             </div>
             <div className="space-y-4">
@@ -184,7 +184,7 @@ export default function AdminDiscounts() {
       {deleteId && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-xl animate-scale-in text-center">
-            <div className="text-4xl mb-3">⚠️</div>
+            <div className="text-4xl mb-3"></div>
             <h3 className="font-bold text-[#3d1520] mb-1">Delete Discount?</h3>
             <p className="text-rose-400 text-sm mb-5">This cannot be undone.</p>
             <div className="flex gap-3">

@@ -43,7 +43,7 @@ export default function CustomOrderPage() {
     if (!validate()) return
     const category = showCustomCategory ? form.customCategory : form.category
     const priceRange = form.minPrice && form.maxPrice ? `₨${form.minPrice} - ₨${form.maxPrice}` : form.minPrice ? `From ₨${form.minPrice}` : form.maxPrice ? `Up to ₨${form.maxPrice}` : 'Not specified'
-    const msg = `🧶 *Custom Order Request*\n\n*Name:* ${form.name}\n*Email:* ${form.email || 'Not provided'}\n*Phone:* ${form.phone}\n*Address:* ${form.address || 'Not provided'}\n\n*Category:* ${category || 'Not specified'}\n*Description:* ${form.description}\n*Budget:* ${priceRange}\n*Delivery:* ${form.delivery || 'Not specified'}\n\n_Sent via Crochet Masterpiece website_ 🌸`
+    const msg = ` *Custom Order Request*\n\n*Name:* ${form.name}\n*Email:* ${form.email || 'Not provided'}\n*Phone:* ${form.phone}\n*Address:* ${form.address || 'Not provided'}\n\n*Category:* ${category || 'Not specified'}\n*Description:* ${form.description}\n*Budget:* ${priceRange}\n*Delivery:* ${form.delivery || 'Not specified'}\n\n_Sent via Crochet Masterpiece website_ `
     window.open(`https://wa.me/923159202186?text=${encodeURIComponent(msg)}`, '_blank')
     setSubmitted(true)
   }
@@ -54,14 +54,14 @@ export default function CustomOrderPage() {
       <main className="flex-1 pt-20 pb-12 px-4 sm:px-6">
         {/* Header */}
         <div className="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 py-10 sm:py-14 text-center relative overflow-hidden -mx-4 sm:-mx-6 mb-8">
-          {['🧶', '🌸', '✨', '💕', '🎀'].map((e, i) => (
+          {['', '', '', '', ''].map((e, i) => (
             <span key={i} className="absolute text-2xl opacity-20 animate-float select-none" style={{ left: `${5 + i * 22}%`, top: '50%', transform: 'translateY(-50%)', animationDelay: `${i * 0.4}s` }}>{e}</span>
           ))}
           <div className="relative z-10">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-1.5 mb-3">
               <span className="text-white text-xs font-bold tracking-wide">CUSTOM ORDERS</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">Your Dream Piece 🎀</h1>
+            <h1 className="text-3xl sm:text-4xl font-black text-white mb-2">Your Dream Piece </h1>
             <p className="text-rose-100 text-sm sm:text-base max-w-md mx-auto">Tell us what you want and we&apos;ll bring it to life with our expert crochet craft</p>
           </div>
         </div>
@@ -69,9 +69,9 @@ export default function CustomOrderPage() {
         <div className="max-w-2xl mx-auto">
           {submitted ? (
             <div className="bg-white rounded-3xl p-10 shadow-sm border border-rose-100 text-center">
-              <div className="text-6xl mb-4 animate-bounce">🎉</div>
+              <div className="text-6xl mb-4 animate-bounce"></div>
               <h2 className="text-2xl font-black text-[#3d1520] mb-2">Request Sent!</h2>
-              <p className="text-rose-400 mb-5">Your custom order request has been sent to WhatsApp. We&apos;ll get back to you soon! 🌸</p>
+              <p className="text-rose-400 mb-5">Your custom order request has been sent to WhatsApp. We&apos;ll get back to you soon! </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <BubbleButton variant="primary" size="md" onClick={() => setSubmitted(false)}>Place Another Order</BubbleButton>
                 <BubbleButton variant="secondary" size="md" onClick={() => window.location.href = '/'}>Back to Home</BubbleButton>
@@ -79,7 +79,7 @@ export default function CustomOrderPage() {
             </div>
           ) : (
             <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-lg border border-rose-100">
-              <h2 className="font-bold text-[#3d1520] text-lg mb-6">Tell us about your order 🌸</h2>
+              <h2 className="font-bold text-[#3d1520] text-lg mb-6">Tell us about your order </h2>
 
               <div className="space-y-4">
                 {/* Contact info */}
@@ -126,7 +126,7 @@ export default function CustomOrderPage() {
                       </label>
                     </div>
                   </div>
-                  {errors.description && <p className="mt-1 text-xs text-red-500 pl-1">⚠️ {errors.description}</p>}
+                  {errors.description && <p className="mt-1 text-xs text-red-500 pl-1"> {errors.description}</p>}
                 </div>
 
                 {/* Price range */}
@@ -154,7 +154,7 @@ export default function CustomOrderPage() {
                 {/* Submit */}
                 <div className="pt-2">
                   <BubbleButton variant="primary" size="lg" fullWidth onClick={sendViaWhatsApp}>
-                    <span className="text-lg">💬</span> Send via WhatsApp
+                    <span className="text-lg"></span> Send via WhatsApp
                   </BubbleButton>
                   <p className="text-center text-xs text-rose-300 mt-2">This will open WhatsApp with your order details pre-filled</p>
                 </div>

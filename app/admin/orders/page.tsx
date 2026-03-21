@@ -69,7 +69,7 @@ function OrdersContent() {
   return (
     <div className="p-4 sm:p-6 max-w-7xl mx-auto">
       <div className="mb-5">
-        <h1 className="text-2xl font-black text-[#3d1520]">Orders 📦</h1>
+        <h1 className="text-2xl font-black text-[#3d1520]">Orders </h1>
         <p className="text-rose-400 text-sm">{total} orders total</p>
       </div>
 
@@ -95,7 +95,7 @@ function OrdersContent() {
           {loading ? (
             <div className="space-y-2">{[...Array(5)].map((_, i) => <div key={i} className="skeleton h-20 rounded-2xl" />)}</div>
           ) : filteredOrders.length === 0 ? (
-            <div className="text-center py-12 text-rose-300"><div className="text-4xl mb-2">📦</div><p>No orders found</p></div>
+            <div className="text-center py-12 text-rose-300"><div className="text-4xl mb-2"></div><p>No orders found</p></div>
           ) : filteredOrders.map(o => (
             <div key={o.id} onClick={() => selectOrder(o.id)}
               className={`bg-white rounded-2xl p-4 border cursor-pointer hover:border-rose-300 hover:shadow-sm transition-all ${selected?.id === o.id ? 'border-rose-400 shadow-md' : 'border-rose-100'}`}>
@@ -208,5 +208,5 @@ function OrdersContent() {
 }
 
 export default function AdminOrdersPage() {
-  return <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="text-4xl animate-bounce">📦</div></div>}><OrdersContent /></Suspense>
+  return <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="text-4xl animate-bounce"></div></div>}><OrdersContent /></Suspense>
 }

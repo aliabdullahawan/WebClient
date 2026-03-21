@@ -86,10 +86,10 @@ export default function ForgotPasswordForm() {
   }
 
   const titles: Record<Step, string> = {
-    email: '🔑 Forgot Password?',
-    otp: '📱 Check Your Email',
-    password: '🔒 Set New Password',
-    done: '✅ Password Reset!',
+    email: ' Forgot Password?',
+    otp: ' Check Your Email',
+    password: ' Set New Password',
+    done: ' Password Reset!',
   }
   const subtitles: Record<Step, string> = {
     email: "No worries! Enter your email and we'll send you a reset code",
@@ -102,7 +102,7 @@ export default function ForgotPasswordForm() {
     <AuthCard title={titles[step]} subtitle={subtitles[step]}>
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-2xl px-4 py-3 text-red-600 text-sm flex items-center gap-2 mb-4 animate-fade-in">
-          <span>⚠️</span> {error}
+          <span></span> {error}
         </div>
       )}
 
@@ -112,7 +112,7 @@ export default function ForgotPasswordForm() {
             onChange={e => { setEmail(e.target.value); setError('') }}
             icon={<Mail size={18} />} autoComplete="email" />
           <BubbleButton variant="primary" size="lg" fullWidth loading={loading} onClick={sendOTP}>
-            📨 Send Reset Code
+             Send Reset Code
           </BubbleButton>
           <Link href={isAdmin ? '/login?admin=1' : '/login'}
             className="flex items-center justify-center gap-2 text-sm text-rose-400 hover:text-rose-600 transition-colors mt-2">
@@ -136,7 +136,7 @@ export default function ForgotPasswordForm() {
             ))}
           </div>
           <BubbleButton variant="primary" size="lg" fullWidth loading={loading} onClick={verifyOTP}>
-            ✨ Verify Code
+             Verify Code
           </BubbleButton>
           <div className="text-center text-sm text-rose-400">
             {countdown > 0 ? (
@@ -171,12 +171,12 @@ export default function ForgotPasswordForm() {
               { ok: /\d/.test(newPassword), label: 'One number' },
             ].map(({ ok, label }) => (
               <div key={label} className={`flex items-center gap-2 transition-colors ${ok ? 'text-green-500' : 'text-rose-400'}`}>
-                <span>{ok ? '✅' : '○'}</span> {label}
+                <span>{ok ? '' : '○'}</span> {label}
               </div>
             ))}
           </div>
           <BubbleButton variant="primary" size="lg" fullWidth loading={loading} onClick={resetPassword}>
-            🔐 Reset Password
+             Reset Password
           </BubbleButton>
         </div>
       )}
@@ -184,14 +184,14 @@ export default function ForgotPasswordForm() {
       {step === 'done' && (
         <div className="text-center space-y-5 py-4">
           <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto text-4xl bg-green-50 border-2 border-green-200 animate-scale-in">
-            🎉
+            
           </div>
           <div>
             <h3 className="text-lg font-semibold text-[#3d1520] mb-1">All done!</h3>
             <p className="text-rose-400 text-sm">You can now sign in with your new password</p>
           </div>
           <BubbleButton variant="primary" size="lg" fullWidth onClick={() => router.push(isAdmin ? '/login?admin=1' : '/login')}>
-            🌸 Back to Login
+             Back to Login
           </BubbleButton>
         </div>
       )}

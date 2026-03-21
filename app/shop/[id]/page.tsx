@@ -78,7 +78,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
     const discountedPrice = product.discount?.discounted_price || product.price
     const totalPrice = discountedPrice * qty
     const couponLine = couponCode ? `\n*Coupon Code:* ${couponCode}` : ''
-    const msg = `🧶 *New Order*\n\n*Product:* ${product.name}\n*Quantity:* ${qty}\n*Price:* ₨${totalPrice.toLocaleString()}${product.discount ? ` (${product.discount.discount_percentage}% off)` : ''}${couponLine}\n\n_Ordered via Crochet Masterpiece website_ 🌸`
+    const msg = ` *New Order*\n\n*Product:* ${product.name}\n*Quantity:* ${qty}\n*Price:* ₨${totalPrice.toLocaleString()}${product.discount ? ` (${product.discount.discount_percentage}% off)` : ''}${couponLine}\n\n_Ordered via Crochet Masterpiece website_ `
     window.open(`https://wa.me/923159202186?text=${encodeURIComponent(msg)}`, '_blank')
     setShowOrderModal(false)
   }
@@ -100,7 +100,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
     const res = await fetch('/api/reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ product_id: id, rating: newRating, comment: newComment }) })
     const d = await res.json()
     if (d.success) {
-      setReviewSuccess('Review submitted! 🌸')
+      setReviewSuccess('Review submitted! ')
       const p = await fetch(`/api/products/${id}`).then(r => r.json())
       setReviews(p.reviews || [])
       setNewRating(0); setNewComment('')
@@ -110,7 +110,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
 
   if (loading) return (
     <div className="flex flex-col min-h-screen" style={{ background: 'linear-gradient(160deg,#fdf2f8,#fff8fb)' }}>
-      <Navbar /><div className="flex-1 flex items-center justify-center pt-20"><div className="text-5xl animate-bounce">🧶</div></div><Footer />
+      <Navbar /><div className="flex-1 flex items-center justify-center pt-20"><div className="text-5xl animate-bounce"></div></div><Footer />
     </div>
   )
   if (!product) return null
@@ -140,7 +140,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                   <img src={`/api/products/image/${images[imgIdx]?.id}`} alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-8xl opacity-20">🧶</div>
+                  <div className="w-full h-full flex items-center justify-center text-8xl opacity-20"></div>
                 )}
                 {product.discount && (
                   <div className="absolute top-4 left-4 bg-gradient-to-r from-rose-400 to-pink-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1">
@@ -232,7 +232,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                   <Sparkles size={16} /> Buy Now
                 </BubbleButton>
                 <BubbleButton variant="secondary" size="lg" className="flex-1" onClick={addToCart}>
-                  {addedToCart ? '✅ Added!' : <><ShoppingCart size={16} /> Add to Cart</>}
+                  {addedToCart ? ' Added!' : <><ShoppingCart size={16} /> Add to Cart</>}
                 </BubbleButton>
               </div>
 
@@ -257,7 +257,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                 <p className="text-green-500 text-sm">{reviewSuccess}</p>
               ) : (
                 <div className="space-y-3">
-                  {reviewError && <p className="text-red-500 text-sm">⚠️ {reviewError}</p>}
+                  {reviewError && <p className="text-red-500 text-sm"> {reviewError}</p>}
                   <StarRating value={newRating} onChange={setNewRating} size={24} />
                   <textarea value={newComment} onChange={e => setNewComment(e.target.value)} placeholder="Share your experience..."
                     rows={3} className="w-full px-4 py-3 bg-rose-50 rounded-2xl border border-rose-200 text-[#3d1520] text-sm outline-none focus:border-rose-400 resize-none placeholder-rose-300 transition-all" />
@@ -290,7 +290,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
                     {r.comment && <p className="text-rose-400 text-sm mt-2 leading-relaxed">{r.comment}</p>}
                     {r.admin_reply && (
                       <div className="mt-3 pl-3 border-l-2 border-rose-200 bg-rose-50/50 rounded-r-xl p-3">
-                        <p className="text-xs font-bold text-rose-400 mb-1">🌸 Crochet Masterpiece replied:</p>
+                        <p className="text-xs font-bold text-rose-400 mb-1"> Crochet Masterpiece replied:</p>
                         <p className="text-rose-500 text-sm">{r.admin_reply}</p>
                       </div>
                     )}
@@ -306,7 +306,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
       {showOrderModal && (
         <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 w-full max-w-md shadow-xl border border-rose-100 animate-scale-in">
-            <h3 className="font-bold text-[#3d1520] text-lg mb-1">Complete Your Order 🌸</h3>
+            <h3 className="font-bold text-[#3d1520] text-lg mb-1">Complete Your Order </h3>
             <p className="text-rose-400 text-sm mb-5">{product.name} × {qty} = <strong className="text-rose-500">₨{(price * qty).toLocaleString()}</strong></p>
             <div className="mb-5">
               <input value={couponCode} onChange={e => setCouponCode(e.target.value.toUpperCase())} placeholder="Coupon code (optional)"
@@ -314,11 +314,11 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
             </div>
             <div className="space-y-3">
               <BubbleButton variant="primary" size="lg" fullWidth onClick={sendViaWhatsApp}>
-                <span className="text-lg">💬</span> Order via WhatsApp
+                <span className="text-lg"></span> Order via WhatsApp
               </BubbleButton>
               {user && (
                 <BubbleButton variant="secondary" size="md" fullWidth onClick={sendSiteOrder}>
-                  📋 Send Order Query via Site
+                   Send Order Query via Site
                 </BubbleButton>
               )}
               <button onClick={() => setShowOrderModal(false)} className="w-full text-sm text-rose-400 hover:text-rose-600 transition-colors py-2">Cancel</button>

@@ -57,7 +57,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-[#3d1520]">Dashboard 👑</h1>
+          <h1 className="text-2xl font-black text-[#3d1520]">Dashboard </h1>
           <p className="text-rose-400 text-sm">Welcome back, Admin!</p>
         </div>
         <div className="text-right hidden sm:block">
@@ -67,12 +67,12 @@ export default function AdminDashboard() {
 
       {/* Main stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-        <StatCard icon="👥" label="Total Users" value={stats.totalUsers.toLocaleString()} gradient="from-blue-400 to-indigo-500" />
-        <StatCard icon="📦" label="Total Orders" value={stats.totalOrders.toLocaleString()} sub={`${stats.pendingOrders} pending`} gradient="from-amber-400 to-orange-500" />
-        <StatCard icon="💰" label="Total Revenue" value={`₨${stats.totalRevenue >= 1000 ? (stats.totalRevenue/1000).toFixed(1)+'K' : stats.totalRevenue}`} sub="Delivered orders" gradient="from-green-400 to-emerald-500" />
+        <StatCard icon="" label="Total Users" value={stats.totalUsers.toLocaleString()} gradient="from-blue-400 to-indigo-500" />
+        <StatCard icon="" label="Total Orders" value={stats.totalOrders.toLocaleString()} sub={`${stats.pendingOrders} pending`} gradient="from-amber-400 to-orange-500" />
+        <StatCard icon="" label="Total Revenue" value={`₨${stats.totalRevenue >= 1000 ? (stats.totalRevenue/1000).toFixed(1)+'K' : stats.totalRevenue}`} sub="Delivered orders" gradient="from-green-400 to-emerald-500" />
         <StatCard icon="⭐" label="Avg Rating" value={stats.avgRating} gradient="from-yellow-400 to-amber-500" />
-        <StatCard icon="🎀" label="Active Discounts" value={stats.activeDiscounts} gradient="from-pink-400 to-rose-500" />
-        <StatCard icon="📈" label="Weekly Revenue" value={`₨${stats.weeklyRevenue >= 1000 ? (stats.weeklyRevenue/1000).toFixed(1)+'K' : stats.weeklyRevenue}`} gradient="from-rose-400 to-pink-500" />
+        <StatCard icon="" label="Active Discounts" value={stats.activeDiscounts} gradient="from-pink-400 to-rose-500" />
+        <StatCard icon="" label="Weekly Revenue" value={`₨${stats.weeklyRevenue >= 1000 ? (stats.weeklyRevenue/1000).toFixed(1)+'K' : stats.weeklyRevenue}`} gradient="from-rose-400 to-pink-500" />
       </div>
 
       {/* Social followers */}

@@ -72,13 +72,13 @@ function ShopContent() {
   const updateFilter = (key: string, value: unknown) => setFilters(f => ({ ...f, [key]: value, page: 1 }))
 
   const sortOptions = [
-    { value: 'created_at|desc', label: '✨ Newest First' },
-    { value: 'created_at|asc', label: '📅 Oldest First' },
-    { value: 'price|asc', label: '💰 Price: Low to High' },
-    { value: 'price|desc', label: '💸 Price: High to Low' },
+    { value: 'created_at|desc', label: ' Newest First' },
+    { value: 'created_at|asc', label: ' Oldest First' },
+    { value: 'price|asc', label: ' Price: Low to High' },
+    { value: 'price|desc', label: ' Price: High to Low' },
     { value: 'average_rating|desc', label: '⭐ Top Rated' },
-    { value: 'name|asc', label: '🔤 A to Z' },
-    { value: 'name|desc', label: '🔤 Z to A' },
+    { value: 'name|asc', label: ' A to Z' },
+    { value: 'name|desc', label: ' Z to A' },
   ]
 
   const activeFilterCount = [filters.category, filters.minPrice, filters.maxPrice, filters.featured].filter(Boolean).length
@@ -92,9 +92,9 @@ function ShopContent() {
         <div className="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 py-8 sm:py-10 px-4 sm:px-6 text-center relative overflow-hidden">
           {[...Array(4)].map((_, i) => (
             <span key={i} className="absolute text-white text-2xl opacity-20 animate-float select-none"
-              style={{ left: `${5 + i * 30}%`, top: '50%', transform: 'translateY(-50%)', animationDelay: `${i * 0.5}s` }}>🧶</span>
+              style={{ left: `${5 + i * 30}%`, top: '50%', transform: 'translateY(-50%)', animationDelay: `${i * 0.5}s` }}></span>
           ))}
-          <h1 className="text-2xl sm:text-3xl font-black text-white mb-1 relative z-10">Our Collection 🌸</h1>
+          <h1 className="text-2xl sm:text-3xl font-black text-white mb-1 relative z-10">Our Collection </h1>
           <p className="text-rose-100 text-sm relative z-10">{total > 0 ? `${total} beautiful handcrafted pieces` : 'Explore our handcrafted pieces'}</p>
         </div>
 
@@ -198,7 +198,7 @@ function ShopContent() {
             </div>
           ) : products.length === 0 ? (
             <div className="text-center py-20">
-              <div className="text-6xl mb-4 animate-float">🧶</div>
+              <div className="text-6xl mb-4 animate-float"></div>
               <h3 className="font-bold text-[#3d1520] text-xl mb-2">No products found</h3>
               <p className="text-rose-400 text-sm mb-5">Try adjusting your search or filters</p>
               <BubbleButton variant="secondary" size="md" onClick={() => setFilters(f => ({ ...f, q: '', category: '', minPrice: '', maxPrice: '', featured: false, page: 1 }))}>
@@ -237,5 +237,5 @@ function ShopContent() {
 }
 
 export default function ShopPage() {
-  return <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{background:'linear-gradient(135deg,#fdf2f8,#fff1f2)'}}><div className="text-5xl animate-bounce">🧶</div></div>}><ShopContent /></Suspense>
+  return <Suspense fallback={<div className="min-h-screen flex items-center justify-center" style={{background:'linear-gradient(135deg,#fdf2f8,#fff1f2)'}}><div className="text-5xl animate-bounce"></div></div>}><ShopContent /></Suspense>
 }
