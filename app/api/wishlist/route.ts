@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 
-async function getUserId() {
+async function getUserId(): Promise<string | null> {
   const cookieStore = await cookies()
   const s = cookieStore.get('user_session')
   if (!s) return null
@@ -15,16 +15,15 @@ export async function GET() {
   const supabase = createServiceClient()
   const { data } = await supabase
     .from('wishlist')
-    .select('id, product_id, created_at, products(id, name, price, average_rating, review_count)')
+    .select('id, product_id, products(id, name, price, average_rating, product_images(id, is_primary))')
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
-  const items = (data || []).map((i: any) => ({ id: i.id, product_id: i.product_id, created_at: i.created_at, product: i.products }))
-  return NextResponse.json({ items })
+  return NextResponse.json({ items: data || [] })
 }
 
 export async function POST(req: NextRequest) {
   const userId = await getUserId()
-  if (!userId) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
+  if (!userId) return NextResponse.json({ error: 'Sign in first' }, { status: 401 })
   const { product_id } = await req.json()
   if (!product_id) return NextResponse.json({ error: 'Product ID required' }, { status: 400 })
   const supabase = createServiceClient()
